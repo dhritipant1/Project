@@ -1,25 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import "./App.css";
+import axios from "axios";
 
-function App() {
+export default function App() {
+
+  const [data, setData] = useState([]);
+  const [err, setErr] = useState(null);
+
+  useEffect(() => {
+    axios.get("http://localhost:8080/student")
+      .then((res) => setData(res.data))
+      .catch((err) => setErr(err.toString()))
+  }, [])
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {err && <p>{err}</p>}
+      {data.length > 0 && <div>
+        <table>
+          <tr>
+            <th>
+              Name
+            </th>
+            <th>
+              Age
+            </th>
+            <th>
+              Current Expenses
+            </th>
+          </tr>
+          {data.map((d) => 
+          <>
+          <tr>
+            <td>{d.name}</td>
+            <td>{d.age}</td>
+            <td>{d.currentExpenses}</td>
+          </tr>
+          </>)}
+        </table>
+        <button>Make new transaction</button>
+          <form>
+            
+          </form>
+        </div>}
     </div>
   );
 }
-
-export default App;
